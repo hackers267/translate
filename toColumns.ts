@@ -85,12 +85,14 @@ from(arr)
           dataIndex: key,
           title,
           valueEnum,
+          search: false,
         };
       }
       return {
         key,
         dataIndex: key,
         title,
+        search: false,
       };
     }),
     toArray(),
