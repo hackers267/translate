@@ -18,6 +18,8 @@ import {
   mergeAll,
   mergeMap,
   reduce,
+  skip,
+  take,
   tap,
   toArray,
 } from "../deno_rxjs/operators.ts";
@@ -39,6 +41,8 @@ export {
   of,
   partition,
   reduce,
+  skip,
+  take,
   tap,
   toArray,
   zip,

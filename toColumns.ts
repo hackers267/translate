@@ -1,15 +1,7 @@
-import {
-  filter,
-  from,
-  map,
-  mergeAll,
-  Observable,
-  of,
-  toArray,
-  zip,
-} from "./deps.ts";
+import {filter, from, map, mergeAll, Observable, of, skip, toArray, zip,} from "./deps.ts";
 
-const str: string = await Deno.readTextFile("./data.txt");
+const file_path = "./data/api_product_page_page.txt";
+const str: string = await Deno.readTextFile(file_path);
 const arr = str.split(/\n/);
 
 function getPrefix(comment: string) {
@@ -66,7 +58,10 @@ function getValueEnum$(prefix$: Observable<string>) {
   );
 }
 
-from(arr)
+const columns$ = from(arr)
+  .pipe(skip(1));
+
+const columns_result$ = columns$
   .pipe(
     filter((x) => !!x),
     map((x) => {
@@ -74,30 +69,31 @@ from(arr)
       const prefix$ = getPrefix(comment);
       const title$ = getTitle$(prefix$);
       const value_enum$ = getValueEnum$(prefix$);
-      return zip(of(key), title$, value_enum$);
+      const search$ = of(false);
+      return zip(of(key), title$, value_enum$, search$);
     }),
     mergeAll(),
     map((x) => {
-      const [key, title, valueEnum] = x;
+      const [key, title, valueEnum, search] = x;
       if (valueEnum) {
         return {
           key,
           dataIndex: key,
           title,
           valueEnum,
-          search: false,
+          search,
         };
       }
       return {
         key,
         dataIndex: key,
         title,
-        search: false,
+        search,
       };
     }),
     toArray(),
-  )
-  .subscribe(async (x) => {
-    await Deno.writeTextFile("./columns.txt", JSON.stringify(x));
-    console.log("done");
+  );
+columns_result$
+  .subscribe((x) => {
+    console.log(x);
   });
