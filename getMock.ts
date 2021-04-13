@@ -51,7 +51,7 @@ async function generateMockByFilePath(file_path: string) {
     .pipe(
       map((x) => {
         const [api, body] = x;
-        return { api, body: `"POST ${api}":${JSON.stringify(body)}` };
+        return { api, body: `"POST /${api}":${JSON.stringify(body)}` };
       }),
       tap((x) => {
         const { api, body } = x;

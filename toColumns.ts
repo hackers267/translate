@@ -11,7 +11,7 @@ import {
 } from "./deps.ts";
 import { getValueEnum } from "./utils.ts";
 
-const file_path = "./data/api_customer_page_page.txt";
+const file_path = "./data/api_project_page_page.txt";
 const str: string = await Deno.readTextFile(file_path);
 export const arr = str.split(/\n/);
 
