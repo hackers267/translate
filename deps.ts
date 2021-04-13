@@ -5,8 +5,12 @@ import {
   Observable,
   of,
   partition,
+  pipe,
   zip,
 } from "../deno_rxjs/mod.ts";
+
+import { walk, walkSync } from "https://deno.land/std@0.92.0/fs/mod.ts";
+
 import {
   bufferCount,
   bufferToggle,
@@ -40,10 +44,13 @@ export {
   Observable,
   of,
   partition,
+  pipe,
   reduce,
   skip,
   take,
   tap,
   toArray,
+  walk,
+  walkSync,
   zip,
 };

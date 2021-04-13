@@ -1,8 +1,19 @@
-import {filter, from, map, mergeAll, Observable, of, skip, toArray, zip,} from "./deps.ts";
+import {
+  filter,
+  from,
+  map,
+  mergeAll,
+  Observable,
+  of,
+  skip,
+  toArray,
+  zip,
+} from "./deps.ts";
+import { getValueEnum } from "./utils.ts";
 
-const file_path = "./data/api_product_page_page.txt";
+const file_path = "./data/api_customer_page_page.txt";
 const str: string = await Deno.readTextFile(file_path);
-const arr = str.split(/\n/);
+export const arr = str.split(/\n/);
 
 function getPrefix(comment: string) {
   return of(comment).pipe(
@@ -38,26 +49,6 @@ function getTitle$(prefix$: Observable<string>) {
   );
 }
 
-function getValueEnum$(prefix$: Observable<string>) {
-  return prefix$.pipe(
-    map((x: string) => {
-      const reg = /[:：]/;
-      const index = x.search(reg);
-      if (index > -1) {
-        return x.slice(index + 1);
-      }
-      return "";
-    }),
-    map((x: string) => {
-      if (!x) return x;
-      return x.split(/[;；]/).map((item) => {
-        const [key, value] = item.split("->");
-        return { [key]: value };
-      }).reduce((acc, cur) => ({ ...acc, ...cur }), {});
-    }),
-  );
-}
-
 const columns$ = from(arr)
   .pipe(skip(1));
 
@@ -68,7 +59,7 @@ const columns_result$ = columns$
       const [key, , comment] = x.split("|");
       const prefix$ = getPrefix(comment);
       const title$ = getTitle$(prefix$);
-      const value_enum$ = getValueEnum$(prefix$);
+      const value_enum$ = prefix$.pipe(getValueEnum());
       const search$ = of(false);
       return zip(of(key), title$, value_enum$, search$);
     }),
