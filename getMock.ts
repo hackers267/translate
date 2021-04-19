@@ -1,18 +1,5 @@
-import {
-  filter,
-  from,
-  map,
-  mergeAll,
-  of,
-  pipe,
-  reduce,
-  skip,
-  take,
-  tap,
-  walkSync,
-  zip,
-} from "./deps.ts";
-import { getValueEnum } from "./utils.ts";
+import {filter, from, map, mergeAll, of, pipe, reduce, skip, take, tap, walkSync, zip,} from "./deps.ts";
+import {getValueEnum} from "./utils.ts";
 
 const paths = walkSync("./data");
 Array.from(paths).filter((f) => f.isFile)
@@ -64,7 +51,8 @@ async function generateMockByFilePath(file_path: string) {
       tap((x) => {
         const { api, body } = x;
         const path = api.split("/").join("_") + ".txt";
-        Deno.writeTextFile(path, body);
+        console.log(body);
+        // Deno.writeTextFile(path, body);
       }),
     )
     .subscribe();
@@ -93,8 +81,19 @@ function getMockTypeByComment(comment: string) {
   );
 }
 
+const dict:Map<string,string> = new Map([
+    ['creator','@cname'],
+    ['creater','@cname'],
+    ['operator','@cname'],
+    ['companyname','@company'],
+    ['managername','@cname'],
+])
+
 function getMockType(x: string) {
-  const [_, type, comment] = x.split("|");
+  const [key, type, comment] = x.split("|");
+  if(dict.has(key)) {
+    return of(dict.get(key) as string);
+  }
   if (comment.includes(":")) {
     return getMockTypeByComment(comment);
   } else {
