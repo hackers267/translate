@@ -50,9 +50,11 @@ async function generateMockByFilePath(file_path: string) {
       }),
       tap((x) => {
         const { api, body } = x;
-        const path = api.split("/").join("_") + ".txt";
-        console.log(body);
-        // Deno.writeTextFile(path, body);
+        const dir = "./data_mock";
+        const ext = ".txt";
+        const base_name = api.split("/").join("_");
+        const file_name = `${dir}/${base_name}${ext}`;
+        Deno.writeTextFile(file_name, body);
       }),
     )
     .subscribe();
