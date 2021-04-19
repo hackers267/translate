@@ -40,7 +40,7 @@ async function generateMockByFilePath(file_path: string) {
           return {
             api,
             body:
-              `"POST /${api}":mock(success:true,data:{total:12,list:{${data}}})`,
+              `"POST /${api}":mock({success:true,data:{total:12,"list|12":[${data}]}})`,
           };
         }
         return {
@@ -84,6 +84,7 @@ function getMockTypeByComment(comment: string) {
 }
 
 const dict:Map<string,string> = new Map([
+    ['id','@id'],
     ['creator','@cname'],
     ['creater','@cname'],
     ['operator','@cname'],
