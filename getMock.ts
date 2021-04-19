@@ -1,5 +1,18 @@
-import {filter, from, map, mergeAll, of, pipe, reduce, skip, take, tap, walkSync, zip,} from "./deps.ts";
-import {getValueEnum} from "./utils.ts";
+import {
+  filter,
+  from,
+  map,
+  mergeAll,
+  of,
+  pipe,
+  reduce,
+  skip,
+  take,
+  tap,
+  walkSync,
+  zip,
+} from "./deps.ts";
+import { getValueEnum } from "./utils.ts";
 
 const paths = walkSync("./data");
 Array.from(paths).filter((f) => f.isFile)
@@ -83,18 +96,18 @@ function getMockTypeByComment(comment: string) {
   );
 }
 
-const dict:Map<string,string> = new Map([
-    ['id','@id'],
-    ['creator','@cname'],
-    ['creater','@cname'],
-    ['operator','@cname'],
-    ['companyname','@company'],
-    ['managername','@cname'],
-])
+const dict: Map<string, string> = new Map([
+  ["id", "@id"],
+  ["creator", "@cname"],
+  ["creater", "@cname"],
+  ["operator", "@cname"],
+  ["companyname", "@company"],
+  ["managername", "@cname"],
+]);
 
 function getMockType(x: string) {
   const [key, type, comment] = x.split("|");
-  if(dict.has(key)) {
+  if (dict.has(key)) {
     return of(dict.get(key) as string);
   }
   if (comment.includes(":")) {
