@@ -24,15 +24,15 @@ Array.from(paths)
     const c$ = await genColumnsByFilePath(f);
     c$.pipe(tap(async (x) => {
       const { api, content } = x;
-      const dir = "./data_columns"
+      const dir = "./data_columns";
       const ext = ".txt";
       const base_name = api
         .split("/")
         .filter((x) => !!x)
         .join("_");
-      const file_name =`${dir}/${base_name}${ext}`;
+      const file_name = `${dir}/${base_name}${ext}`;
       console.log(`${file_name}:started`);
-      await Deno.writeTextFile(file_name,content);
+      await Deno.writeTextFile(file_name, content);
       console.log(`${file_name}:ended`);
     }))
       .subscribe();

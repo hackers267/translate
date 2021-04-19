@@ -42,16 +42,24 @@ async function generateMockByFilePath(file_path: string) {
       return { [key]: type };
     }),
     reduce((acc, cur) => ({ ...acc, ...cur }), {}),
-    map((x) => {
-      return { success: true, data: { "list|12": [x], total: 12 } };
-    }),
   );
 
   zip(api$, body_result$)
     .pipe(
       map((x) => {
         const [api, body] = x;
-        return { api, body: `"POST /${api}":${JSON.stringify(body)}` };
+        const data = JSON.stringify(body);
+        if (api.endsWith("/page")) {
+          return {
+            api,
+            body:
+              `"POST /${api}":mock(success:true,data:{total:12,list:{${data}}})`,
+          };
+        }
+        return {
+          api,
+          body: `"POST /${api}":mock({success:true,data:${data}})`,
+        };
       }),
       tap((x) => {
         const { api, body } = x;
